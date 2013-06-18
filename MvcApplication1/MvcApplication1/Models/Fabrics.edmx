@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FabricsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="FabricsModelStoreContainer">
+          <EntitySet Name="Client" EntityType="FabricsModel.Store.Client" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Occupation" EntityType="FabricsModel.Store.Occupation" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Order" EntityType="FabricsModel.Store.Order" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OrderLine" EntityType="FabricsModel.Store.OrderLine" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Product" EntityType="FabricsModel.Store.Product" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Client_Occupation" Association="FabricsModel.Store.FK_Client_Occupation">
+            <End Role="Occupation" EntitySet="Occupation" />
+            <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Order_ClientId" Association="FabricsModel.Store.fk_Order_ClientId">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="fk_OrderLine_OrderId" Association="FabricsModel.Store.fk_OrderLine_OrderId">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderLine" EntitySet="OrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="fk_OrderLine_ProductId" Association="FabricsModel.Store.fk_OrderLine_ProductId">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OrderLine" EntitySet="OrderLine" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="varchar" MaxLength="40" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="40" />
+          <Property Name="LastName" Type="varchar" MaxLength="40" />
+          <Property Name="Gender" Type="char" MaxLength="1" />
+          <Property Name="DateOfBirth" Type="datetime" />
+          <Property Name="CreditRating" Type="float" />
+          <Property Name="XCode" Type="char" MaxLength="7" />
+          <Property Name="OccupationId" Type="int" />
+          <Property Name="TelephoneNumber" Type="varchar" MaxLength="20" />
+          <Property Name="Street1" Type="varchar" MaxLength="100" />
+          <Property Name="Street2" Type="varchar" MaxLength="100" />
+          <Property Name="City" Type="varchar" MaxLength="100" />
+          <Property Name="ZipCode" Type="varchar" MaxLength="15" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Notes" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Occupation">
+          <Key>
+            <PropertyRef Name="OccupationId" />
+          </Key>
+          <Property Name="OccupationId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OccupationName" Type="varchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ClientId" Type="int" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="OrderTotal" Type="numeric" Scale="2" />
+          <Property Name="OrderStatus" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="OrderLine">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="LineNumber" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="LineNumber" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Qty" Type="numeric" Nullable="false" Scale="3" />
+          <Property Name="LineTotal" Type="numeric" Nullable="false" Scale="2" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="varchar" MaxLength="80" />
+          <Property Name="Price" Type="smallmoney" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="Stock" Type="numeric" Scale="3" />
+        </EntityType>
+        <Association Name="FK_Client_Occupation">
+          <End Role="Occupation" Type="FabricsModel.Store.Occupation" Multiplicity="0..1" />
+          <End Role="Client" Type="FabricsModel.Store.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Occupation">
+              <PropertyRef Name="OccupationId" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="OccupationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Order_ClientId">
+          <End Role="Client" Type="FabricsModel.Store.Client" Multiplicity="0..1" />
+          <End Role="Order" Type="FabricsModel.Store.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_OrderLine_OrderId">
+          <End Role="Order" Type="FabricsModel.Store.Order" Multiplicity="1" />
+          <End Role="OrderLine" Type="FabricsModel.Store.OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_OrderLine_ProductId">
+          <End Role="Product" Type="FabricsModel.Store.Product" Multiplicity="1" />
+          <End Role="OrderLine" Type="FabricsModel.Store.OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FabricsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="FabricsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Client" EntityType="FabricsModel.Client" />
+          <EntitySet Name="Occupation" EntityType="FabricsModel.Occupation" />
+          <EntitySet Name="Order" EntityType="FabricsModel.Order" />
+          <EntitySet Name="OrderLine" EntityType="FabricsModel.OrderLine" />
+          <EntitySet Name="Product" EntityType="FabricsModel.Product" />
+          <AssociationSet Name="FK_Client_Occupation" Association="FabricsModel.FK_Client_Occupation">
+            <End Role="Occupation" EntitySet="Occupation" />
+            <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Order_ClientId" Association="FabricsModel.fk_Order_ClientId">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="fk_OrderLine_OrderId" Association="FabricsModel.fk_OrderLine_OrderId">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderLine" EntitySet="OrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="fk_OrderLine_ProductId" Association="FabricsModel.fk_OrderLine_ProductId">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OrderLine" EntitySet="OrderLine" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="LastName" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="Gender" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+          <Property Name="CreditRating" Type="Double" />
+          <Property Name="XCode" Type="String" MaxLength="7" Unicode="false" FixedLength="true" />
+          <Property Name="OccupationId" Type="Int32" />
+          <Property Name="TelephoneNumber" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Street1" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Street2" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ZipCode" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Notes" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Occupation" Relationship="FabricsModel.FK_Client_Occupation" FromRole="Client" ToRole="Occupation" />
+          <NavigationProperty Name="Order" Relationship="FabricsModel.fk_Order_ClientId" FromRole="Client" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Occupation">
+          <Key>
+            <PropertyRef Name="OccupationId" />
+          </Key>
+          <Property Name="OccupationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OccupationName" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Client" Relationship="FabricsModel.FK_Client_Occupation" FromRole="Occupation" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="OrderTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrderStatus" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <NavigationProperty Name="Client" Relationship="FabricsModel.fk_Order_ClientId" FromRole="Order" ToRole="Client" />
+          <NavigationProperty Name="OrderLine" Relationship="FabricsModel.fk_OrderLine_OrderId" FromRole="Order" ToRole="OrderLine" />
+        </EntityType>
+        <EntityType Name="OrderLine">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="LineNumber" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="LineNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Qty" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+          <Property Name="LineTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Order" Relationship="FabricsModel.fk_OrderLine_OrderId" FromRole="OrderLine" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="FabricsModel.fk_OrderLine_ProductId" FromRole="OrderLine" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="Price" Type="Decimal" Precision="10" Scale="4" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="Stock" Type="Decimal" Precision="18" Scale="3" />
+          <NavigationProperty Name="OrderLine" Relationship="FabricsModel.fk_OrderLine_ProductId" FromRole="Product" ToRole="OrderLine" />
+        </EntityType>
+        <Association Name="FK_Client_Occupation">
+          <End Role="Occupation" Type="FabricsModel.Occupation" Multiplicity="0..1" />
+          <End Role="Client" Type="FabricsModel.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Occupation">
+              <PropertyRef Name="OccupationId" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="OccupationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Order_ClientId">
+          <End Role="Client" Type="FabricsModel.Client" Multiplicity="0..1" />
+          <End Role="Order" Type="FabricsModel.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_OrderLine_OrderId">
+          <End Role="Order" Type="FabricsModel.Order" Multiplicity="1" />
+          <End Role="OrderLine" Type="FabricsModel.OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_OrderLine_ProductId">
+          <End Role="Product" Type="FabricsModel.Product" Multiplicity="1" />
+          <End Role="OrderLine" Type="FabricsModel.OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FabricsModelStoreContainer" CdmEntityContainer="FabricsEntities">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="FabricsModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="CreditRating" ColumnName="CreditRating" />
+                <ScalarProperty Name="XCode" ColumnName="XCode" />
+                <ScalarProperty Name="OccupationId" ColumnName="OccupationId" />
+                <ScalarProperty Name="TelephoneNumber" ColumnName="TelephoneNumber" />
+                <ScalarProperty Name="Street1" ColumnName="Street1" />
+                <ScalarProperty Name="Street2" ColumnName="Street2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Occupation">
+            <EntityTypeMapping TypeName="FabricsModel.Occupation">
+              <MappingFragment StoreEntitySet="Occupation">
+                <ScalarProperty Name="OccupationId" ColumnName="OccupationId" />
+                <ScalarProperty Name="OccupationName" ColumnName="OccupationName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="FabricsModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderTotal" ColumnName="OrderTotal" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderLine">
+            <EntityTypeMapping TypeName="FabricsModel.OrderLine">
+              <MappingFragment StoreEntitySet="OrderLine">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="LineNumber" ColumnName="LineNumber" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="FabricsModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
