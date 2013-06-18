@@ -4,5 +4,6 @@
 
 /MvcApplication1/MvcApplication1/bin
 /MvcApplication1/MvcApplication1/obj
+/MvcApplication1/packages
 *.suo
 *.user
