@@ -16,4 +16,8 @@ ExtendPartialClassConstructor
 * 使用 .NET Framework 4.0
 * 包含一個範例資料庫 (在 App_Data 目錄下)
 * 已建立 Entity Framework 實體資料模型 (EDMX)
-* 已建立實體資料模型所需的 Partial Class / Buddy Class 
+* 已建立實體資料模型所需的 Partial Class / Buddy Class
+
+相關文章
+=======
+[The Will Will Web | ASP.NET MVC 開發心得分享 (24)：擴充部分類別的建構子](http://blog.miniasp.com/post/2013/06/18/ASPNET-MVC-Developer-Note-Part-24-Extend-Constructor-in-Partial-Method.aspx)
